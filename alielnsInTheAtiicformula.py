@@ -1,6 +1,15 @@
 from matplotlib import pyplot as plt
 import math
 
+def frange(start, final, increment):
+    numbers = []
+
+    while start < final:
+        numbers.append(start)
+        start = start + increment
+
+    return(numbers)
+
 def drawGraph(xCoordinates, yCoordinates):
     figure = plt.figure()
 
@@ -13,28 +22,19 @@ def drawGraph(xCoordinates, yCoordinates):
 
     plt.show()
 
-def frange(start, final, interval):
-    numbers = []
-
-    while start < final:
-        numbers.append(start)
-        start = start + interval
-
-    return(numbers)
-
 def drawTrajectory(velocity, theta):
     theta = math.radians(theta)
     #gracAvv is gravitational acceleration, or his "g"
     gravAcc = 9.8
 
-    tFlight = 2*velocity*math.sin(theta)/9
+    tFlight = 2*velocity*math.sin(theta)/gravAcc
     intervalsForFrange = frange(0, tFlight, 0.001)
 
     xCoordinates = []
     yCoordinates = []
 
     for time in intervalsForFrange:
-        xCoordinates.append(velocity*math.cos(theta)*time*time)
+        xCoordinates.append(velocity*math.cos(theta)*time)
         yCoordinates.append(velocity*math.sin(theta)*time - 0.5*gravAcc*time*time)
 
     drawGraph(xCoordinates, yCoordinates)
