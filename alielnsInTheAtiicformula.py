@@ -10,20 +10,24 @@ def frange(start, final, increment):
 
     return(numbers)
 
-def drawGraph(xCoordinates, yCoordinates):
+def drawGraph(xCoordinatesList, yCoordinatesList):
     figure = plt.figure()
 
     graph = figure.add_subplot(111)
 
-    graph.plot(xCoordinates, yCoordinates, color = 'lightcoral')
+    for turns in range(0,len(xCoordinatesList)):
+        graph.plot(*xCoordinatesList[turns], *yCoordinatesList[turns])
+        # print(*xCoordinatesList[turns], *yCoordinatesList[turns])
+
     graph.set_xlabel('Distance')
     graph.set_ylabel('Height')
     graph.legend(['Trajectory'])
 
     plt.show()
 
-def drawTrajectory(velocity, theta):
+def drawParabola(velocity, theta):
     theta = math.radians(theta)
+
     #gracAvv is gravitational acceleration, or his "g"
     gravAcc = 9.8
 
@@ -37,15 +41,37 @@ def drawTrajectory(velocity, theta):
         xCoordinates.append(velocity*math.cos(theta)*time)
         yCoordinates.append(velocity*math.sin(theta)*time - 0.5*gravAcc*time*time)
 
-    drawGraph(xCoordinates, yCoordinates)
+    return(xCoordinates, yCoordinates)    
+
+def drawTrajectory(numberOfTimes, velocityList, thetaList):
+    # "velocity" is his "u"
+    xCoordinatesList = []
+    yCoordinatesList = []
+
+    for turn in range(0,numberOfTimes):
+        xList, yList = drawParabola(velocityList[turn], thetaList[turn])
+        xCoordinatesList.append(xList)
+        yCoordinatesList.append(yList)
+
+    drawGraph(xCoordinatesList, yCoordinatesList)
+    return(True)
+
 
 
 if __name__ == "__main__":
     try:
-        # "velocity" is his "u"
-        velocity = float(input('Enter the initial velocity (in m/s) : '))
-        theta = float(input('Enter the angle of projection (in degrees) : '))
-        drawTrajectory(velocity, theta)
+
+        numberOfTimes = int(input("How mnay trajectories do you want drawn? : "))
+        velocityList = []
+        thetaList = []
+
+        for loopNumber in range(0,numberOfTimes):
+            velocity = float(input('Enter the initial velocity (in m/s) : '))
+            velocityList.append(velocity)
+            theta = float(input('Enter the angle of projection (in degrees) : '))
+            thetaList.append(theta)
+
+        drawTrajectory(numberOfTimes, velocityList, thetaList)
 
     except Exception as error:
         print(error)
