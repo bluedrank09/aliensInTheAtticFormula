@@ -10,14 +10,12 @@ def frange(start, final, increment):
 
     return(numbers)
 
-def drawGraph(xCoordinatesList, yCoordinatesList):
+def drawGraph(fullList):
     figure = plt.figure()
 
     graph = figure.add_subplot(111)
-
-    for turns in range(0,len(xCoordinatesList)):
-        graph.plot(*xCoordinatesList[turns], *yCoordinatesList[turns])
-        # print(*xCoordinatesList[turns], *yCoordinatesList[turns])
+    
+    graph.plot(*fullList)
 
     graph.set_xlabel('Distance')
     graph.set_ylabel('Height')
@@ -28,11 +26,10 @@ def drawGraph(xCoordinatesList, yCoordinatesList):
 def drawParabola(velocity, theta):
     theta = math.radians(theta)
 
-    #gracAvv is gravitational acceleration, or his "g"
     gravAcc = 9.8
 
     tFlight = 2*velocity*math.sin(theta)/gravAcc
-    intervalsForFrange = frange(0, tFlight, 0.001)
+    intervalsForFrange = frange(0, tFlight, 0.1)
 
     xCoordinates = []
     yCoordinates = []
@@ -44,16 +41,15 @@ def drawParabola(velocity, theta):
     return(xCoordinates, yCoordinates)    
 
 def drawTrajectory(numberOfTimes, velocityList, thetaList):
-    # "velocity" is his "u"
-    xCoordinatesList = []
-    yCoordinatesList = []
+    fullList = []
 
     for turn in range(0,numberOfTimes):
         xList, yList = drawParabola(velocityList[turn], thetaList[turn])
-        xCoordinatesList.append(xList)
-        yCoordinatesList.append(yList)
+        fullList.append(xList)
+        fullList.append(yList)
 
-    drawGraph(xCoordinatesList, yCoordinatesList)
+    drawGraph(fullList)
+
     return(True)
 
 
@@ -61,7 +57,7 @@ def drawTrajectory(numberOfTimes, velocityList, thetaList):
 if __name__ == "__main__":
     try:
 
-        numberOfTimes = int(input("How mnay trajectories do you want drawn? : "))
+        numberOfTimes = int(input("How many trajectories do you want drawn? : "))
         velocityList = []
         thetaList = []
 
